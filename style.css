@@ -1,0 +1,290 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    touch-action: none;
+}
+
+.eraser {
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    border: 2px #d3d3d3 solid;
+    background: rgba(207, 207, 207, 0.2);
+    opacity: 0.7;
+    display: none;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.toolbar {
+    height: 50px;
+    width: 100px;
+    position: fixed;
+    bottom: 0px;
+    left: 50%;
+    z-index: 12;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    background: #fff;
+}
+
+[class^="toolbar-"] {
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    text-align: center;
+    display: inline-block;
+    float: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease-out;
+}
+
+[class^="toolbar-"]:hover {
+    background: #f1f1f2;
+}
+
+[class^="toolbar-"].active {
+    background: #f1f1f2;
+}
+
+[class^="toolbar-"] svg {
+    transform: translateY(12px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[class^="toolbar-"].active svg {
+    transform: translateY(3px);
+}
+
+.toolbar-pen {
+    position: relative;
+}
+
+.toolbar-pen span {
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+}
+
+.toolbar-pen.active span {
+    opacity: 1;
+    position: absolute;
+    background: #000;
+    top: 3px;
+    right: 3px;
+    border-radius: 100%;
+}
+
+.toolbar-pen-viewer-1 {
+    width: 3px;
+    height: 3px;
+}
+.toolbar-pen-viewer-2 {
+    width: 5px;
+    height: 5px;
+}
+.toolbar-pen-viewer-3 {
+    width: 7px;
+    height: 7px;
+}
+.toolbar-pen-viewer-4 {
+    width: 9px;
+    height: 9px;
+}
+
+.toolbar-eraser {
+}
+
+.toolbarmenu {
+    height: 50px;
+    width: 100px;
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    user-select: none;
+    z-index: 11;
+}
+
+[class^="toolbarmenu-"] {
+    height: auto;
+    width: 160px;
+    background: #fff;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.15);
+}
+
+.toolbarmenu-pen {
+    opacity: 0;
+    width: 260px;
+    transition: opacity 0.2s linear;
+    pointer-events: none;
+    animation-fill-mode: forwards;
+    animation: fadelogOut 0.4s;
+    position: fixed;
+    bottom: 5px;
+    padding: 5px 5px 5px 0;
+}
+
+.width-viewer {
+    height: 200px;
+    width: 50px;
+    float: left;
+}
+
+.switcher-container {
+    height: 200px;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.switcher-container[type="width"] {
+    width: 50px;
+}
+
+.switcher-container [class^="width-switcher-"] {
+    height: 25px;
+    width: 25px;
+    border-radius: 100%;
+    border: 2px solid rgba(179, 179, 179, 0.8);
+    box-shadow: 0 0 0px 3px transparent;
+    transition: box-shadow 0.1s ease-out;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.switcher-container [class^="width-switcher-"]:hover {
+    box-shadow: 0 0 0px 3px rgba(221, 221, 221, 0.8);
+}
+
+.switcher-container [class^="width-switcher-"].active {
+    box-shadow: 0 0 0px 3px rgba(221, 221, 221, 0.8);
+}
+
+.switcher-container [class^="width-switcher-"] span {
+    background: #000;
+    display: block;
+    border-radius: 100%;
+}
+
+.switcher-container .width-switcher-4 span {
+    height: 13px;
+    width: 13px;
+}
+
+.switcher-container .width-switcher-3 span {
+    height: 11px;
+    width: 11px;
+}
+
+.switcher-container .width-switcher-2 span {
+    height: 9px;
+    width: 9px;
+}
+
+.switcher-container .width-switcher-1 span {
+    height: 5px;
+    width: 5px;
+}
+
+.switcher-container[type="color"] {
+    width: 150px;
+    flex-flow: column wrap;
+}
+
+.switcher-container .color-switcher {
+    height: 25px;
+    width: 25px;
+    border-radius: 100%;
+    border: 2px solid rgba(179, 179, 179, 0.8);
+    box-shadow: 0 0 0px 3px transparent;
+    transition: box-shadow 0.1s ease-out;
+    cursor: pointer;
+    flex-shrink: 0;
+    background-color: white;
+    margin: 10px 10px;
+}
+
+.switcher-container .color-switcher:hover {
+    box-shadow: 0 0 0px 3px rgba(221, 221, 221, 0.8);
+}
+
+.switcher-container .color-switcher.active {
+    box-shadow: 0 0 0px 3px rgba(221, 221, 221, 0.8);
+}
+
+.toolbarmenu-pen.active {
+    pointer-events: all;
+    opacity: 1;
+    animation-fill-mode: forwards;
+    animation: fadelogIn 0.3s;
+}
+
+.toolbarmenu-eraser {
+    opacity: 0;
+    transition: opacity 0.2s linear;
+    pointer-events: none;
+    animation-fill-mode: forwards;
+    animation: fadelogOut 0.4s;
+    margin-left: 50px;
+}
+
+.toolbarmenu-eraser.active {
+    pointer-events: all;
+    opacity: 1;
+    animation-fill-mode: forwards;
+    animation: fadelogIn 0.3s;
+}
+
+.toolbarmenu-eraser p {
+    cursor: pointer;
+    height: 45px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    transition: background-color 0.1s ease-out;
+}
+
+.toolbarmenu-eraser p:hover {
+    background: #f1f1f2;
+}
+
+.toolbarmenu-eraser p img {
+    float: left;
+    margin-right: 7px;
+    margin-left: 10px;
+    transform: scale(0.8);
+}
+
+@keyframes fadelogIn {
+    0% {
+        transform: translate3d(0, 80px, 0) scale(0.7);
+    }
+    100% {
+        transform: none;
+    }
+}
+
+@keyframes fadelogOut {
+    0% {
+        transform: none;
+    }
+    100% {
+        transform: translate3d(0, 80px, 0) scale(0.7);
+    }
+}
