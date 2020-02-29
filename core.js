@@ -62,10 +62,9 @@
     let baseLineMode = 0;
     let lineColorList = ["#000", "#5B2D90", "#0069BF", "#F6630C", "#AB228B", "#B7B7B7", "#E3E3E3", "#E71224", "#D20078", "#02A556", "#C09E66", "#FFC114"]; //线条颜色列表
     let lineColorMode = 0;
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
     let history = [];
     let priviousDraw = 0;
+    let priviousPressure = 0;
 
     for (let i = 0; i < 4; i++) {
         document.querySelector(`.width-switcher-${i + 1}`).onpointerup = function () { setPenWidth(i) }
@@ -115,20 +114,24 @@
             canDraw = true;
             ctx.globalCompositeOperation = "source-over";
             ctx.strokeStyle = lineColorList[lineColorMode];
-            const { x, y } = getPos(e);
+            const { x, y, pressure } = getPos(e);
+            priviousPressure = pressure;
             points.push({ x, y });
             beginPoint = { x, y };
         },
         "up": function (e) {
             if (!canDraw) return;
             const { x, y, pressure } = getPos(e);
+
             points.push({ x, y });
 
             if (points.length > 3) {
                 const lastTwoPoints = points.slice(-2);
                 const controlPoint = lastTwoPoints[0];
                 const endPoint = lastTwoPoints[1];
-                usePen(beginPoint, controlPoint, endPoint, pressure * baseLineList[baseLineMode]);
+                usePen(beginPoint, controlPoint, endPoint, (priviousPressure + pressure) / 2 * baseLineList[baseLineMode]);
+            } else {
+                priviousPressure = pressure;
             }
             beginPoint = null;
             canDraw = false;
