@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\admin\\.conda\\envs\\tensorflow\\python.exe"
+    "python.pythonPath": "C:\\Users\\admin\\.conda\\envs\\tensorflow\\python.exe",
+    "liveServer.settings.port": 5514
 }

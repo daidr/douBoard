@@ -159,27 +159,52 @@
         "down": function (e) {
             writeHistory();
             canDraw = true;
-            ctx.strokeStyle = "rgba(250,250,250,0)";
+            ctx.strokeStyle = "rgba(0,0,0,1)";
             ctx.globalCompositeOperation = "destination-out";
             const { x, y } = getPos(e);
             eraser.style.top = `${y - 30}px`;
             eraser.style.left = `${x - 30}px`;
             eraser.style.display = "block";
+            points.push({ x, y });
+            beginPoint = { x, y };
         },
         "up": function (e) {
+
+            if (!canDraw) return;
+            const { x, y } = getPos(e);
+
+            points.push({ x, y });
+
+            if (points.length > 3) {
+                const lastTwoPoints = points.slice(-2);
+                const controlPoint = lastTwoPoints[0];
+                const endPoint = lastTwoPoints[1];
+                useEraser(beginPoint, controlPoint, endPoint, 60);
+            }
+            beginPoint = null;
             canDraw = false;
             eraser.style.display = "none";
+            points = [];
         },
         "move": function (e) {
-            if (canDraw) {
-                const { x, y } = getPos(e);
+            if (!canDraw) return;
+            const { x, y } = getPos(e);
+            points.push({ x, y });
+
+            if (points.length > 3) {
+                const lastTwoPoints = points.slice(-2);
+                const controlPoint = lastTwoPoints[0];
+                const endPoint = {
+                    x: (lastTwoPoints[0].x + lastTwoPoints[1].x) / 2,
+                    y: (lastTwoPoints[0].y + lastTwoPoints[1].y) / 2,
+                }
                 eraser.style.top = `${y - 30}px`;
                 eraser.style.left = `${x - 30}px`;
-                useEraser(x, y, 30);
+                useEraser(beginPoint, controlPoint, endPoint, 60);
+                beginPoint = endPoint;
             }
         }
     }
-
     canvas.onpointerdown = drawMode["down"]
     canvas.onpointerup = drawMode["up"]
     canvas.onpointermove = drawMode["move"]
@@ -200,10 +225,12 @@
         ctx.closePath();
     }
 
-    function useEraser(x, y, eraserRadius) {
+    function useEraser(beginPoint, controlPoint, endPoint, width) {
         ctx.beginPath();
-        ctx.arc(x, y, eraserRadius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(beginPoint.x, beginPoint.y);
+        ctx.quadraticCurveTo(controlPoint.x, controlPoint.y, endPoint.x, endPoint.y);
+        ctx.lineWidth = width;
+        ctx.stroke();
     }
 
     toolbarEraser.innerHTML = icons.eraser();
