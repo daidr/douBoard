@@ -110,6 +110,7 @@
 
     const drawMode = {
         "down": function (e) {
+            setToolbarStatus(false);
             writeHistory();
             canDraw = true;
             ctx.globalCompositeOperation = "source-over";
@@ -121,6 +122,7 @@
         },
         "up": function (e) {
             if (!canDraw) return;
+            setToolbarStatus(true);
             const { x, y, pressure } = getPos(e);
 
             points.push({ x, y });
@@ -157,6 +159,7 @@
 
     const eraserMode = {
         "down": function (e) {
+            setToolbarStatus(false);
             writeHistory();
             canDraw = true;
             ctx.strokeStyle = "rgba(0,0,0,1)";
@@ -169,8 +172,8 @@
             beginPoint = { x, y };
         },
         "up": function (e) {
-
             if (!canDraw) return;
+            setToolbarStatus(true);
             const { x, y } = getPos(e);
 
             points.push({ x, y });
@@ -328,6 +331,15 @@
                 u8arr[n] = bstr.charCodeAt(n);
             }
             return new Blob([u8arr], { type: mime });
+        }
+    }
+
+    function setToolbarStatus(status) {
+        let toolbarContainer = document.querySelector("#toolbar-container");
+        if (!status) {
+            toolbarContainer.classList.add("untouchable");
+        } else {
+            toolbarContainer.classList.remove("untouchable");
         }
     }
 })()
