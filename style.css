@@ -6,6 +6,11 @@ body {
     margin: 0;
 }
 
+* {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 canvas {
     position: fixed;
     top: 0;
@@ -121,6 +126,11 @@ canvas {
     width: 160px;
     background: #fff;
     box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+}
+
+[class^="toolbarmenu-"].active {
+    pointer-events: initial;
 }
 
 .toolbarmenu-pen {
