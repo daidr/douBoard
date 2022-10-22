@@ -13,9 +13,18 @@
     <canvas height="100%" width="100%" id="mainCanvas"></canvas>
     <div id="toolbar-container">
         <div class="eraser"></div>
+        <div class="pen-dot"></div>
         <div class="toolbar">
             <div class="toolbar-pen active">笔</div>
             <div class="toolbar-eraser">橡皮</div>
+            <div class="toolbar-penonly">
+                <svg viewBox="0 0 1024 1024" width="32" height="32">
+                    <path
+                        d="M773.333333 517.792l-260.448-65.12V277.333333a85.333333 85.333333 0 0 0-170.666666 0v284.650667l-12.501334-12.501333a105.92 105.92 0 0 0-75.413333-31.253334h-1.109333a105.888 105.888 0 0 0-75.872 32.842667c-22.474667 23.413333-22.602667 57.450667-0.832 86.037333L363.2 903.989333a106.762667 106.762667 0 0 0 93.994667 56h247.68a149.514667 149.514667 0 0 0 149.333333-149.333333V621.376a106.613333 106.613333 0 0 0-80.874667-103.584zM427.552 149.344a21.322667 21.322667 0 0 0 21.333333-21.333333v-42.666667a21.333333 21.333333 0 1 0-42.666666 0v42.666667a21.322667 21.322667 0 0 0 21.333333 21.333333zM235.562667 277.333333h42.666666a21.333333 21.333333 0 1 0 0-42.666666h-42.666666a21.333333 21.333333 0 1 0 0 42.666666zM555.552 256a21.322667 21.322667 0 0 0 21.333333 21.333333h42.666667a21.333333 21.333333 0 0 0 0-42.666666h-42.666667a21.322667 21.322667 0 0 0-21.333333 21.333333zM528.736 186.848a21.258667 21.258667 0 0 0 15.082667-6.250667l30.165333-30.165333a21.333333 21.333333 0 1 0-30.165333-30.165333l-30.165334 30.165333a21.333333 21.333333 0 0 0 15.082667 36.416zM311.285333 180.586667a21.333333 21.333333 0 0 0 30.165334-30.165334l-30.165334-30.165333a21.333333 21.333333 0 0 0-30.165333 30.176z"
+                        fill="#000"></path>
+                </svg>
+                <div class="status"></div>
+            </div>
         </div>
         <div class="toolbarmenu">
             <div class="toolbarmenu-pen">
@@ -38,11 +47,11 @@
                 </div>
             </div>
             <div class="toolbarmenu-eraser">
-                <p class="clearAll"><img src="./assets/icons/trashcan.svg" width="21px" />清空画布</p>
+                <p class="clearAll"><img src="./assets/icons/trashcan.svg" width="21px" alt="" />清空画布</p>
             </div>
         </div>
         <a href="https://github.com/daidr/douBoard" onclick="this.remove()" target="_blank" class="github-corner"
-            aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250"
+            aria-label="View source on GitHub" rel="noopener"><svg width="80" height="80" viewBox="0 0 250 250"
                 style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
                 <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
                 <path

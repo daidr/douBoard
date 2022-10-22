@@ -27,11 +27,12 @@
 
     let toolbarPen = document.querySelector(".toolbar-pen");
     let toolbarEraser = document.querySelector(".toolbar-eraser");
+    let toolbarPenOnly = document.querySelector(".toolbar-penonly");
     let toolbarPenMenu = document.querySelector(".toolbarmenu-pen");
     let toolbarEraserMenu = document.querySelector(".toolbarmenu-eraser");
 
     let eraser = document.querySelector(".eraser");
-
+    let isPenOnly = false;
     for (i in document.images) document.images[i].ondragstart = function () { return false; };
 
     window.onresize = function () {
@@ -110,9 +111,9 @@
 
     const drawMode = {
         "down": function (e) {
-            e.preventDefault()
+            if (isPenOnly && e.pointerType != "pen") return;
             setToolbarStatus(false);
-            writeHistory();
+            // writeHistory();
             canDraw = true;
             ctx.globalCompositeOperation = "source-over";
             ctx.strokeStyle = lineColorList[lineColorMode];
@@ -122,8 +123,8 @@
             beginPoint = { x, y };
         },
         "up": function (e) {
-            e.preventDefault()
             if (!canDraw) return;
+            if (isPenOnly && e.pointerType != "pen") return;
             setToolbarStatus(true);
             const { x, y, pressure } = getPos(e);
 
@@ -142,7 +143,7 @@
             points = [];
         },
         "move": function (e) {
-            e.preventDefault()
+            if (isPenOnly && e.pointerType != "pen") return;
             if (!canDraw) return;
             const { x, y, pressure } = getPos(e);
             points.push({ x, y });
@@ -163,7 +164,7 @@
     const eraserMode = {
         "down": function (e) {
             setToolbarStatus(false);
-            writeHistory();
+            // writeHistory();
             canDraw = true;
             ctx.strokeStyle = "rgba(0,0,0,1)";
             ctx.globalCompositeOperation = "destination-out";
@@ -211,9 +212,10 @@
             }
         }
     }
-    canvas.onpointerdown = drawMode["down"]
-    canvas.onpointerup = drawMode["up"]
-    canvas.onpointermove = drawMode["move"]
+
+    canvas.addEventListener("pointerdown", drawMode["down"], { passive: true })
+    canvas.addEventListener("pointerup", drawMode["up"], { passive: true })
+    canvas.addEventListener("pointermove", drawMode["move"], { passive: true })
 
     function getPos(evt) {
         return {
@@ -252,9 +254,15 @@
         }
         toolbarPen.classList.add("active");
         toolbarEraser.classList.remove("active");
-        canvas.onpointerdown = drawMode["down"];
-        canvas.onpointerup = drawMode["up"];
-        canvas.onpointermove = drawMode["move"];
+        canvas.removeEventListener("pointerdown", eraserMode["down"], { passive: true })
+        canvas.removeEventListener("pointerup", eraserMode["up"], { passive: true })
+        canvas.removeEventListener("pointermove", eraserMode["move"], { passive: true })
+        canvas.removeEventListener("pointerdown", drawMode["down"], { passive: true })
+        canvas.removeEventListener("pointerup", drawMode["up"], { passive: true })
+        canvas.removeEventListener("pointermove", drawMode["move"], { passive: true })
+        canvas.addEventListener("pointerdown", drawMode["down"], { passive: true })
+        canvas.addEventListener("pointerup", drawMode["up"], { passive: true })
+        canvas.addEventListener("pointermove", drawMode["move"], { passive: true })
     }
     toolbarEraser.onpointerup = function () {
         toolbarPenMenu.classList.remove("active");
@@ -263,9 +271,24 @@
         }
         toolbarEraser.classList.add("active");
         toolbarPen.classList.remove("active");
-        canvas.onpointerdown = eraserMode["down"];
-        canvas.onpointerup = eraserMode["up"];
-        canvas.onpointermove = eraserMode["move"];
+        canvas.removeEventListener("pointerdown", eraserMode["down"], { passive: true })
+        canvas.removeEventListener("pointerup", eraserMode["up"], { passive: true })
+        canvas.removeEventListener("pointermove", eraserMode["move"], { passive: true })
+        canvas.removeEventListener("pointerdown", drawMode["down"], { passive: true })
+        canvas.removeEventListener("pointerup", drawMode["up"], { passive: true })
+        canvas.removeEventListener("pointermove", drawMode["move"], { passive: true })
+        canvas.addEventListener("pointerdown", eraserMode["down"], { passive: true })
+        canvas.addEventListener("pointerup", eraserMode["up"], { passive: true })
+        canvas.addEventListener("pointermove", eraserMode["move"], { passive: true })
+    }
+
+    toolbarPenOnly.onpointerup = function () {
+        isPenOnly = !isPenOnly;
+        if (isPenOnly) {
+            toolbarPenOnly.classList.add("enabled");
+        } else {
+            toolbarPenOnly.classList.remove("enabled");
+        }
     }
 
 

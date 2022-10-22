@@ -4,6 +4,8 @@ body {
     height: 100%;
     padding: 0;
     margin: 0;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 * {
@@ -34,7 +36,7 @@ canvas {
 
 .toolbar {
     height: 50px;
-    width: 100px;
+    width: 150px;
     position: fixed;
     bottom: 0px;
     left: 50%;
@@ -108,6 +110,19 @@ canvas {
 }
 
 .toolbar-eraser {
+}
+
+.toolbar-penonly .status {
+    width: 7px;
+    height: 7px;
+    background-color: #13a559;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    border-radius: 100%;
+}
+.toolbar-penonly.enabled .status {
+    background-color: #e31328;
 }
 
 .toolbarmenu {
