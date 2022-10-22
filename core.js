@@ -110,6 +110,7 @@
 
     const drawMode = {
         "down": function (e) {
+            e.preventDefault()
             setToolbarStatus(false);
             writeHistory();
             canDraw = true;
@@ -121,6 +122,7 @@
             beginPoint = { x, y };
         },
         "up": function (e) {
+            e.preventDefault()
             if (!canDraw) return;
             setToolbarStatus(true);
             const { x, y, pressure } = getPos(e);
@@ -140,6 +142,7 @@
             points = [];
         },
         "move": function (e) {
+            e.preventDefault()
             if (!canDraw) return;
             const { x, y, pressure } = getPos(e);
             points.push({ x, y });
@@ -343,3 +346,8 @@
         }
     }
 })()
+
+
+document.addEventListener("touchstart", function (e) {
+    e.preventDefault();
+}, { passive: false });
